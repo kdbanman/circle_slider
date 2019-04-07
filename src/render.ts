@@ -1,5 +1,7 @@
+import * as $ from 'jquery';
+
 function render() {
-    document.getElementById('wrapper').innerHTML = "yeah right!";
+    $('.wrapper').html('yeah right!');
 }
 
-export = render;
+export { render };

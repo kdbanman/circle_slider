@@ -18,12 +18,11 @@ module.exports = {
         extensions: [ '.ts', '.tsx', '.js' ]
     },
     devServer: {
-        port: 9000,
-        contentBase: path.join(__dirname, 'dist')
+        port: 9000
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'index.html'
+            template: 'src/index.html'
         })
     ]
 };

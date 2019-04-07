@@ -12,7 +12,7 @@ yarn dev
 # Build to /dist for production
 yarn build
 
-# Deploy to gh-pages branch
+# Deploy /dist to gh-pages branch
 git add dist && git commit -m "deploy new version"
-git checkout gh-pages && git merge master && git push
+git subtree push --prefix dist origin gh-pages
 ``` 
