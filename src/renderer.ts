@@ -11,6 +11,7 @@ class Renderer {
   private toEuclideanMatrix: Matrix;
 
   constructor(spacing: number) {
+    paper.setup(<HTMLCanvasElement>document.getElementById('automataView'));
     this.spacing = spacing;
 
     this.toHexMatrix = (new Matrix(1, 0, 0, 1, 0, 0))
@@ -36,8 +37,6 @@ class Renderer {
   }
 
   render(grid: Grid) {
-    paper.setup(<HTMLCanvasElement>document.getElementById('automataView'));
-
     for (let pointCoord of this.hexCoords(grid.getPoints())) {
       let pointShape = paper.Shape.Circle(pointCoord, 1);
       pointShape.strokeColor = '#CCC';

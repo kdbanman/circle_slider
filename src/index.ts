@@ -17,5 +17,6 @@ $(function () {
 
   let grid = new Grid(circles, gridOffset, gridSize, gridSpacing);
 
-  new Renderer(10).render(grid);
+  let renderer = new Renderer(10);
+  renderer.render(grid);
 });
