@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode production",
-    "dev": "webpack-dev-server --mode development --progress --color --open"
+    "dev": "webpack-dev-server --mode development --progress --color --open",
+    "deploy": "./deploy.sh"
   },
   "devDependencies": {
     "@types/jquery": "^3.3.29",
