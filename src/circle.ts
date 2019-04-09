@@ -29,6 +29,10 @@ class Circle {
     return this.position;
   }
 
+  setPosition(position: Point) {
+    this.position = position;
+  }
+
   neighborhoodPoints(): Point[] {
     return canonical_neighborhood_deltas.map((delta) => this.position.add(delta));
   }

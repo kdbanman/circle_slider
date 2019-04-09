@@ -3,6 +3,7 @@ import * as paper from 'paper';
 import { Point, Matrix } from 'paper';
 
 import { Grid } from './grid';
+import { Automata } from './automata'
 
 class Renderer {
 
@@ -22,27 +23,29 @@ class Renderer {
     this.toEuclideanMatrix = this.toHexMatrix.inverted();
   }
 
-  toHexCoord(euclideanCoord: Point): Point {
+  private toHexCoord(euclideanCoord: Point): Point {
     return this.toHexMatrix.transform(euclideanCoord);
   }
 
-  toEuclideanCoord(hexCoord: Point): Point {
+  private toEuclideanCoord(hexCoord: Point): Point {
     return this.toEuclideanMatrix.transform(hexCoord);
   }
 
-  *hexCoords(euclideanCoords: Iterable<Point>): Iterable<Point> {
+  private *hexCoords(euclideanCoords: Iterable<Point>): Iterable<Point> {
     for (let euclideanCoord of euclideanCoords) {
       yield this.toHexCoord(euclideanCoord);
     }
   }
 
-  render(grid: Grid) {
-    for (let pointCoord of this.hexCoords(grid.getPoints())) {
+  render(grid: Grid, automata: Automata) {
+    paper.project.clear();
+
+    for (let pointCoord of this.hexCoords(grid.getPointCoords())) {
       let pointShape = paper.Shape.Circle(pointCoord, 1);
       pointShape.strokeColor = '#CCC';
     }
 
-    let euclideanCircleCoords = grid.getCircles().map((circle) => circle.getPosition());
+    let euclideanCircleCoords = automata.getCircleCoords();
     for (let circleCoord of this.hexCoords(euclideanCircleCoords)) {
       let circleShape = paper.Shape.Circle(circleCoord, this.spacing / 2);
       circleShape.strokeColor = '#black';

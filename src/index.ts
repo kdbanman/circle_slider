@@ -4,6 +4,8 @@ import { Size, Point } from 'paper';
 import { Renderer } from './renderer';
 import { Grid } from './grid'
 import { Circle } from './circle'
+import { Automata } from './automata';
+import { Move, Direction } from './move';
 
 $(function () {
   let circle = new Circle(new Point(10, 10))
@@ -15,8 +17,20 @@ $(function () {
   let gridSize = new Size(30, 30);
   let gridSpacing = 10;
 
-  let grid = new Grid(circles, gridOffset, gridSize, gridSpacing);
+  let grid = new Grid(gridOffset, gridSize);
+  let automata = new Automata(grid, circles);
 
-  let renderer = new Renderer(10);
-  renderer.render(grid);
+  // TODO: why do all .render() calls seem to be happening twice 🤔
+
+  let renderer = new Renderer(gridSpacing);
+  renderer.render(grid, automata);
+
+  setInterval(function () {
+    automata.iterate(
+      (iteration, circleCoords) => iteration % 3,
+      (iteration, chosenCircle) => new Move(Direction.CCW, (iteration % 3) + 1)
+    );
+
+    renderer.render(grid, automata);
+  }, 1000);
 });
