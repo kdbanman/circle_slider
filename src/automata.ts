@@ -45,14 +45,9 @@ class Automata {
     let chosenCircleCoord: Point = circleCoords[circleIndex];
     let legalMoves = this.getLegalMovePoints(chosenCircleCoord);
     let desiredMove = chooseDesiredMove(this.iteration, circleIndex);
-    console.log(legalMoves);
-    console.log(desiredMove);
-    console.log(desiredMove.toKey());
-    console.log(legalMoves.has(desiredMove));
 
     if (legalMoves.has(desiredMove)) {
       let newCoord = legalMoves.get(desiredMove);
-      console.log("moving to " + newCoord);
       this.circles[circleIndex].setPosition(newCoord);
     }
 
