@@ -22,8 +22,15 @@ class Automata {
     return this.circles.map((circle) => circle.getPosition())
   }
 
-  getLegalMovePoints(circleCoord: Point): MoveMap {
-    // for each joined circle
+  getJoinedCircleCoords(circle: Circle): Iterable<Point> {
+    let existingCircleCoords = this.circles.map((circle) => circle.getPosition());
+
+    return circle.neighborhoodPoints().filter((point) => existingCircleCoords.indexOf(point));
+  }
+
+  getLegalMovePoints(circle: Circle, joinedCircle: Circle): MoveMap {
+    let circleCoord = circle.getPosition();
+
     // find relative max and min neighbors around joined circle - those are blockers C_k
     // find relative max and min blockers around joined circle - those are blockers B_k
 
@@ -37,22 +44,38 @@ class Automata {
 
   iterate(
     chooseCircle: (iteration: number, circleCoords: Iterable<Point>) => number,
-    chooseDesiredMove: (iteration: number, chosenCircle: number) => Move
-  ): Circle {
-    let circleCoords = this.getCircleCoords();
-    let circleIndex = chooseCircle(this.iteration, circleCoords);
+    chooseJoinedCircle: (iteration: number, joinedCircleCoords: Iterable<Point>) => number,
+    chooseDesiredMove: (iteration: number, chosenCircle: Circle) => Move
+    ): Circle {
+    let chosenCircle = this.getChosenCircle(chooseCircle);
 
-    let chosenCircleCoord: Point = circleCoords[circleIndex];
-    let legalMoves = this.getLegalMovePoints(chosenCircleCoord);
-    let desiredMove = chooseDesiredMove(this.iteration, circleIndex);
+    let chosenJoinedCircle = this.getChosenJoinedCircle(chosenCircle, chooseJoinedCircle);
+
+    let legalMoves = this.getLegalMovePoints(chosenCircle, chosenJoinedCircle);
+    let desiredMove = chooseDesiredMove(this.iteration, chosenCircle);
 
     if (legalMoves.has(desiredMove)) {
       let newCoord = legalMoves.get(desiredMove);
-      this.circles[circleIndex].setPosition(newCoord);
+      chosenCircle.setPosition(newCoord);
     }
 
     this.iteration++;
     return null;
+  }
+
+  private getChosenCircle(chooseCircle: (iteration: number, circleCoords: Iterable<Point>) => number) {
+    let circleCoords = this.getCircleCoords();
+    let chosenCircleIndex = chooseCircle(this.iteration, circleCoords);
+    let chosenCircle = this.circles[chosenCircleIndex];
+    return chosenCircle;
+  }
+
+  private getChosenJoinedCircle(chosenCircle: Circle, chooseJoinedCircle: (iteration: number, joinedCircleCoords: Iterable<Point>) => number) {
+    let joinedCirclesCoords = this.getJoinedCircleCoords(chosenCircle);
+    let chosenJoinedCircleIndex = chooseJoinedCircle(this.iteration, joinedCirclesCoords);
+    let chosenJoinedCircleCoord = joinedCirclesCoords[chosenJoinedCircleIndex];
+    let chosenJoinedCircle = this.circles.find((circle) => circle.getPosition().equals(chosenJoinedCircleCoord));
+    return chosenJoinedCircle;
   }
 }
 

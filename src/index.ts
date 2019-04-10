@@ -26,9 +26,14 @@ $(function () {
   renderer.render(grid, automata);
 
   setInterval(function () {
+    let chooseCircle = (iteration, circleCoords) => iteration % 3;
+    let chooseJoinedCircle = (iteration, joinedCircleCoords) => 1;
+    let chooseDesiredMove = (iteration, chosenCircle) => new Move(Direction.CCW, (iteration % 3) + 1);
+
     automata.iterate(
-      (iteration, circleCoords) => iteration % 3,
-      (iteration, chosenCircle) => new Move(Direction.CCW, (iteration % 3) + 1)
+      chooseCircle,
+      chooseJoinedCircle,
+      chooseDesiredMove
     );
 
     renderer.render(grid, automata);

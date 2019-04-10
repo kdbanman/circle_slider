@@ -1,5 +1,4 @@
-import { Point, Size, Matrix } from 'paper'
-import { Circle } from './circle';
+import { Point, Size } from 'paper'
 
 class Grid {
   offset: Point;
